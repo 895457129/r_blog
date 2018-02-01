@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header/>
-    <CollectList/>
+    <CollectList :items="items"/>
     <Footer/>
   </div>
 </template>
@@ -10,8 +10,17 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import CollectList from '~/components/CollectList.vue';
+import axios from 'axios';
+import { API } from '~/util/const';
 
 export default {
+  async asyncData () {
+    let { data } = await axios.get(`${global.api}tagList`);
+    return { items: data.data || []}
+  },
+  data() {
+    return {title: 'xs'}
+  },
   components: {
     Header,
     Footer,

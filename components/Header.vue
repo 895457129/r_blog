@@ -23,7 +23,7 @@
                 </ul>
               </li>
             </ul></li>
-          <li style="white-space: nowrap;"><a href="#" class="button special">登录</a></li>
+          <li style="white-space: nowrap;"><a href="#" @click.stop.prevent="showLogin" class="button special">登录</a></li>
         </ul>
       </nav>
     </header>
@@ -44,9 +44,76 @@
         </footer>
       </div>
     </section>
+    <el-dialog
+      title="登录"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <el-form :inline="true" :model="formInline" :rules="rules" ref="loginForm" class="demo-form-inline">
+        <el-form-item label="邮箱:" prop="email">
+          <el-input v-model="formInline.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="密码:" prop="password">
+          <el-input v-model="formInline.password" type="password" placeholder="请输入密码"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submit" :loading="loading">登 录</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
+<script>
+  import axios from 'axios';
+  import { API } from '~/util/const';
+  import md5 from 'md5';
 
+  export default {
+    data() {
+      return {
+        dialogVisible: false,
+        loading: false,
+        formInline: {
+          email: '',
+          password: '',
+        },
+        rules: {
+          email: [
+            { required: true, message: '请选择邮箱', trigger: 'change' }
+          ],
+          password: [
+            { required: true, message: '请选择密码', trigger: 'change' }
+          ],
+        }
+      };
+    },
+    methods: {
+      showLogin() {
+        this.dialogVisible = true;
+      },
+      submit() {
+        this.$refs.loginForm.validate((valid) => {
+          if (valid) {
+            this.login();
+          }
+          return false;
+        });
+      },
+      async login() {
+        this.loading = true;
+        const {data} = await axios.post(`${API}user/login`, {
+          email: this.formInline.email,
+          password: md5(md5(this.formInline.password))
+        });
+        this.loading = false;
+        if(0 === data.code) {
+          this.dialogVisible = false;
+          this.$store.commit("setUserName", data.data.email);
+        }
+      },
+    }
+  }
+</script>
 <style>
 
 </style>

@@ -14,7 +14,8 @@ module.exports = {
     ]
   },
   css: [
-    '~static/css/normalize.css'
+    '~/static/css/normalize.css',
+    '~/node_modules/element-ui/lib/theme-chalk/index.css',
   ],
   /*
   ** Customize the progress bar color
@@ -37,13 +38,33 @@ module.exports = {
         })
       }
     },
-    vendor: ['axios'],
+    vendor: [
+      'axios',
+      'element-ui',
+    ],
   },
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
+  babel:{
+    "plugins": [["component", [
+      {
+        "libraryName": "element-ui",
+        "styleLibraryName": "theme-default"
+      },
+      'transform-async-to-generator',
+      'transform-runtime'
+    ]]],
+    comments: true
+  },
+  plugins: [
+    {
+      src: '~plugins/element-ui',
+      ssr: true,
+    }
+  ],
   proxy: [
-    ['/api', { target: 'http://xxx.com:8080' }]
+    ['/api', { target: 'http://localhost:8085' }]
   ]
 }

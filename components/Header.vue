@@ -23,7 +23,10 @@
                 </ul>
               </li>
             </ul></li>
-          <li style="white-space: nowrap;"><a href="#" @click.stop.prevent="showLogin" class="button special">登录</a></li>
+          <li style="white-space: nowrap;">
+            <a href="#" @click.stop.prevent="showLogin" class="button special" v-if="!userName">登录</a>
+            <a class="button special" v-else>{{ userName }}</a>
+          </li>
         </ul>
       </nav>
     </header>
@@ -86,6 +89,11 @@
           ],
         }
       };
+    },
+    computed: {
+      userName: function () {
+        return this.$store.state.userName;
+      },
     },
     methods: {
       showLogin() {

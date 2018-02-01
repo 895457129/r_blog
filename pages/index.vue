@@ -15,7 +15,7 @@ import { API } from '~/util/const';
 
 export default {
   async asyncData () {
-    let { data } = await axios.get(`${global.api}tagList`);
+    let { data } = await axios.get(`${API}tagList`);
     return { items: data.data || []}
   },
   data() {

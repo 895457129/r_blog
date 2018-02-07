@@ -62,7 +62,11 @@ module.exports = {
     {
       src: '~plugins/element-ui',
       ssr: true,
-    }
+    },
+    {
+      src: '~plugins/localStorage',
+      ssr: false,
+    },
   ],
   proxy: [
     ['/api', { target: 'http://localhost:8085' }]
